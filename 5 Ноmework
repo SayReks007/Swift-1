@@ -1,0 +1,144 @@
+import Foundation
+
+enum Engine: String {
+    case On = "Заведен"
+    case Off = "Заглушен"
+}
+enum Window: String {
+    case On = "Открыты"
+    case Off = "Закрыты"
+}
+
+protocol Car {
+    var mark: String {get}
+    var V_trunk: Int {get}
+    var engine: Engine {get set}
+    var window: Window {get set}
+    init(mark: String,V_trunk: Int, engine: Engine, window: Window)
+    func directory()
+}
+
+extension Car{
+    mutating func Enginee()  {
+        switch engine {
+        case .On:
+            self.engine = .Off
+        case .Off:
+            self.engine = .On
+        default:
+            break 
+        }
+        print("Мотор \(engine.rawValue)")
+    }
+    mutating func Window()  {
+        switch window {
+        case .On:
+            window = .Off
+        case .Off:
+            window = .On
+        default:
+            break
+        }
+        print("Окна \(window.rawValue)")
+    }
+}
+class TrunkCar: Car{
+    required init(mark: String, V_trunk: Int, engine: Engine, window: Window) {
+        
+    }
+
+    var V_Cargo = 0
+    var V_loadedCargo = 0
+    
+    func Load_Cargo(V_cargo: Int) {
+        switch V_cargo {
+        case V_cargo where V_cargo > V_trunk - V_loadedCargo:
+            print("Груз не помещается")
+        case V_cargo where V_cargo == V_trunk - V_loadedCargo:
+            print("Багажник полностью забит")
+            self.V_loadedCargo = V_trunk
+        case V_cargo where V_cargo < V_trunk - V_loadedCargo:
+            self.V_loadedCargo += V_cargo
+            print("Груз успешно загружен")
+            print("Осталось места: \(V_trunk - V_loadedCargo) M\"")
+        default:
+            break
+        }
+    }
+    func directory() {
+        print("Авто \(mark), Двигатель \(engine.rawValue), Окна \(window.rawValue), V багажника \(V_trunk) M\", V груза \(V_loadedCargo) M\"")
+    }
+    var V_trunk: Int{return V_trunk}
+    var mark: String{return mark}
+    var engine: Engine{
+        get{
+            return engine
+        }
+        set{
+            engine = newValue
+        }
+        }
+    var window: Window{
+        get{
+            return window
+        }
+        set{
+            window = newValue
+        }
+    }
+    }
+
+class SportCar: Car/*, CustomStringConvertible*/{
+    required init(mark: String, V_trunk: Int, engine: Engine, window: Window) {
+    }
+    var mark: String{return mark}
+    var mode: Mode = .Neitral
+    var engine: Engine{
+        get{
+            return engine
+        }
+        set{
+            engine = newValue
+        }
+    }
+    var V_trunk: Int{return V_trunk}
+    required init(mark: String, V_trunk: Int, engine: Engine, window: Window, mode:Mode) {
+    }
+    enum Mode: String {
+        case Neitral = "Neitral"
+        case Sport = "Sport"
+        case Drive = "Drive"
+    }
+    
+    func directory() {
+        print("Авто \(mark), Двигатель \(engine.rawValue), Режим Езды \(mode.rawValue) Окна \(window.rawValue)")
+    }
+    var window: Window{get{return window }set{window = .Off}}
+    func Change_Mode(Change: Mode){
+        self.mode = Change
+        print("Режим \(mode.rawValue) установлен")
+    }
+}
+//  extension CustomStringConvertible {
+//      
+//  }
+
+
+
+
+var SuperCar = SportCar(mark: "Lamborgini", V_trunk: 100, engine: .Off, window: .Off, mode: .Neitral)
+var Kamaz = TrunkCar(mark: "KKamazzz", V_trunk: 600, engine: .On, window: .Off)
+SuperCar.Enginee()
+SuperCar.Change_Mode(Change: .Drive)
+SuperCar.Change_Mode(Change: .Sport)
+SuperCar.Window()
+
+Kamaz.Enginee()
+Kamaz.Enginee()
+Kamaz.Load_Cargo(V_cargo: 350)
+Kamaz.Load_Cargo(V_cargo: 250)
+Kamaz.Load_Cargo(V_cargo: 121)
+Kamaz.Window()
+
+SuperCar.directory()
+Kamaz.directory()
